@@ -6,7 +6,7 @@
 
 	
 main:
-	li	$a0,13		# change this to test different values
+	li	$a0,9		# change this to test different values
 	jal	hexasc		# call hexasc
 	nop			# delay slot filler (just in case)	
 
@@ -23,7 +23,7 @@ stop:	j	stop		# stop after one run
   	li $t0, 15
   	and $t1, $a0, $t0 #mask 4 LSb from a0
   #is last 4 0-9
- 	li $t2, 9
+ 	li $t2, 10
  	slt $t3, $t1, $t2
  	bne $t3, 1, is_letter #if 3 is not less than 9--> letter
  	addi $t1, $t1, 48
