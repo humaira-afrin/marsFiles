@@ -123,6 +123,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	addi $v0, $0,0x00
  	sb $v0, 6($s0)
  	j stopp
+ 	nop
  	
  stopp:
  	POP ($s1)
@@ -145,6 +146,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	bne $t3, 1, is_letter #if 3 is not less than 9--> letter
  	addi $t1, $t1, 48
  	j end_hexa
+ 	nop
  
  
  is_letter:
@@ -155,6 +157,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	jr $ra
  	nop
  
+
 delay2: 
 	
 	PUSH	($ra)
@@ -173,11 +176,13 @@ for_loop:
 	bne $t3, 1, while_loop #if i>4771 gå tbs till while
 	addi $t0, $t0, 1 #annars i++
 	j for_loop
+	nop
 	
 exit:
 	POP	($s0)
 	POP	($ra)
 	jr $ra
+	nop
 	
 	
 	
