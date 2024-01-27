@@ -85,45 +85,46 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	srl $a0,$a0,12
  	jal hexasc
  	nop
- 	sb $v0, 5($s0)
+ 	sb $v0, 0($s0)
  	
  	
  	
- 	andi $a1, $s1,0xF00
- 	srl $a1,$a1,8
- 	jal hexasc
- 	nop
- 	sb $v0, 4($s0)
- 	nop
- 	
- 
- 	
- 	addi $t0, $0, 0x3a
- 	jal hexasc
- 	nop
- 	sb $v0, 3($s0)
- 	nop
- 	
- 	
- 	andi $a1, $s1,0xF0
- 	srl $a1,$a1,4
- 	jal hexasc
- 	nop
- 	sb $v0, 2($s0)
- 	nop
- 	
-
- 	andi $a1, $s1,0xF
+ 	andi $a0, $s1,0xF00
+ 	srl $a0,$a0,8
  	jal hexasc
  	nop
  	sb $v0, 1($s0)
  	nop
  	
- 	addi $t1, $0,0x00
+ 
+ 	
+ 	addi $v0, $0, 0x3a
+ 	sb $v0, 2($s0)
+ 	nop
+ 	
+ 	
+ 	andi $a0, $s1,0xF0
+ 	srl $a0,$a0,4
  	jal hexasc
  	nop
- 	sb $v0, 0($s0)
+ 	sb $v0, 3($s0)
+ 	nop
  	
+
+ 	andi $a0, $s1,0xF
+ 	jal hexasc
+ 	nop
+ 	sb $v0, 4($s0)
+ 	nop
+ 	
+ 	addi $v0, $0,0x00
+ 	sb $v0, 5($s0)
+ 	
+ 	addi $v0, $0,0x00
+ 	sb $v0, 6($s0)
+ 	j stopp
+ 	
+ stopp:
  	POP ($s1)
  	POP ($s0)
  	POP ($ra)
@@ -136,13 +137,47 @@ tiend:	sw	$t0,0($a0)	# save updated result
   	nop
   
   hexasc:
-  	andi $v0, $a0, 0xf
-  	addi $v0, $v0, 0x30
-  	slti $v1,$v0,0x39
-  	beq $v1,1,L2
- 	addi $v0,$v0,7
+  	li $t0, 15
+  	and $t1, $a0, $t0 #mask 4 LSb from a0
+  #is last 4 0-9
+ 	li $t2, 10
+ 	slt $t3, $t1, $t2
+ 	bne $t3, 1, is_letter #if 3 is not less than 9--> letter
+ 	addi $t1, $t1, 48
+ 	j end_hexa
  
  
- L2:
+ is_letter:
+ 	addi $t1, $t1, 55
+ 
+ end_hexa: 
+ 	move $v0, $t1
  	jr $ra
+ 	nop
  
+delay2: 
+	
+	PUSH	($ra)
+	PUSH	($s0)
+	move $s0, $a0
+	#li $s0, 3000
+
+while_loop:
+	slt $t1, $0, $s0 #if ms>0
+	bne $t1, 1, exit 
+	addi $s0, $s0,-1 #ms--
+for_loop:	
+	li $t0, 0 #i=0
+	li $t2, 4771
+	slt $t3, $t0, $t2 #for i<4771
+	bne $t3, 1, while_loop #if i>4771 gå tbs till while
+	addi $t0, $t0, 1 #annars i++
+	j for_loop
+	
+exit:
+	POP	($s0)
+	POP	($ra)
+	jr $ra
+	
+	
+	
