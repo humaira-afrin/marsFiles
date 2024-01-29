@@ -119,6 +119,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	
  	addi $v0, $0,0x00
  	sb $v0, 5($s0)
+
  	
  	addi $v0, $0,0x00
  	sb $v0, 6($s0)
@@ -133,7 +134,7 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	jr $ra
  	nop
   
-  delay:
+  delay1:
   	jr $ra
   	nop
   
@@ -158,20 +159,20 @@ tiend:	sw	$t0,0($a0)	# save updated result
  	nop
  
 
-delay2: 
+delay: 
 	
 	PUSH	($ra)
 	PUSH	($s0)
 	move $s0, $a0
-	#li $s0, 3000
-
+	
 while_loop:
 	slt $t1, $0, $s0 #if ms>0
 	bne $t1, 1, exit 
 	addi $s0, $s0,-1 #ms--
-for_loop:	
+	
 	li $t0, 0 #i=0
-	li $t2, 4771
+for_loop:	
+	li $t2, 3000
 	slt $t3, $t0, $t2 #for i<4771
 	bne $t3, 1, while_loop #if i>4771 gå tbs till while
 	addi $t0, $t0, 1 #annars i++
